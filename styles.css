@@ -1,0 +1,86 @@
+
+/* some code from chat, some from old project*/
+
+/* 
+ * Always set the map height explicitly to define the size of the div element
+ * that contains the map. 
+ */
+
+
+/* Styling for the layout */
+
+/* I WANT TO IMPROVE THIS BUT IM LAZY*/
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80vh;
+    gap: 50px; /* Adds spacing between items */
+    padding: 0 50px;
+}
+
+
+#map {
+    flex: 1; 
+    background-color: lightgray; /* Placeholder color for visualization */
+    height: 100%;
+}
+
+#list {
+    flex: 1; 
+    height: 100%;
+    background-color: rgb(255, 127, 195); /* Background color */
+    overflow-y: auto; /* Allows scrolling if content overflows */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack elements on smaller screens */
+    }
+
+    #map, #list {
+        flex: 1; /* Equal height */
+    }
+}
+
+
+* {
+    color: rgb(255, 255, 255);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    
+}
+
+h1 {
+    text-align: center;
+}
+
+.items {
+    list-style: none;
+    padding-left: 0px;
+}
+
+.items > * {
+    display: flex;
+    margin: 10px;
+    justify-content: space-between;
+}
+
+li {
+    margin-right: 30px;
+}
+
+body {
+    background-color: #ea4ba0;
+}
+
+button {
+    background-color: rgb(0, 0, 0, 0);
+    border: solid whitesmoke 2px;
+    border-radius: 5px;
+}
