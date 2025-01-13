@@ -52,29 +52,28 @@ app.listen(port, () =>
     {  console.log(`Server started on port ${port}`);}
 );
 
-app.get("/showUsers", (req, res) => {
+app.post("/showUsers", (req, res) => {
     db.query("SELECT * FROM Users", (err, result) => {
         if (err) return err;
         res.send(result);
     })
 });
 
-app.get("/showCafes", (req, res) => {
+app.post("/showCafes", (req, res) => {
     db.query("SELECT * FROM Cafes", (err, result) => {
         if (err) return err;
         res.send(result);
     })
 });
 
-
-app.get("/showUserCafes", (req, res) => {
+app.post("/showUserCafes", (req, res) => {
     db.query("SELECT * FROM UserCafes", (err, result) => {
         if (err) return err;
         res.send(result);
     })
 });
 
-app.post("/addUser/:name", (req, res) => {
+app.get("/addUser/:name", (req, res) => {
     console.log("Route hit!"); 
     const name = req.params.name;
 
@@ -85,8 +84,8 @@ app.post("/addUser/:name", (req, res) => {
     });
 });
 
-app.post("/addCafe", (req, res) => {
-    const { cafe } = req.body;
+app.get("/addCafe/:cafe", (req, res) => {
+    const cafe = req.params.cafe;
     const query = "INSERT INTO Cafes (name) Values (?)"
     db.query(query, [cafe], (err, result) => {
         if (err) throw err;
