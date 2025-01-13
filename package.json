@@ -1,0 +1,28 @@
+{
+  "name": "cafelist",
+  "version": "1.0.0",
+  "description": "Website that takes in user’s location and outputs nearby cafes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gracexu24/cafelist.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gracexu24/cafelist/issues"
+  },
+  "homepage": "https://github.com/gracexu24/cafelist#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.12.0",
+    "webpack": "^5.97.1"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^5.2.0"
+  }
+}
