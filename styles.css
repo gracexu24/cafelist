@@ -7,10 +7,6 @@
  */
 
 
-/* Styling for the layout */
-
-/* I WANT TO IMPROVE THIS BUT IM LAZY*/
-
 .container {
     display: flex;
     justify-content: space-between;
@@ -87,4 +83,50 @@ button {
 
 button:active {
     background-color: rgba(241, 163, 219, 80);
+}
+
+/* for side bar from chat */
+
+/* Sidebar Styles */
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: -300px; /* Start hidden */
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    transition: right 0.3s ease-in-out;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Show Sidebar */
+.sidebar.active {
+    right: 0;
+}
+
+/* Close Button */
+.close-btn {
+    font-size: 24px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+/* Button to Open Sidebar */
+#openSidebar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: #ffe177;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
 }
