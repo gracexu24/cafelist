@@ -9,10 +9,12 @@ const db = mysql.createConnection({
     database: "liked_cafes"
 });
 
+
 db.connect((err) => {
     if (err) throw err;
     console.log("Database connected!");
 
+    //I had to get ride of this to create the database and then added it back
     // Create tables
     const createUsersTable = `
         CREATE TABLE IF NOT EXISTS Users (
@@ -28,6 +30,8 @@ db.connect((err) => {
 
     //stores pairs (user, cafe) to relate the two other tables to each other. 
     // Can also search for all cafes a user liked
+    //many to many relationship 
+    //only used if there is a like relationship 
     const createUserCafesTable = `
         CREATE TABLE IF NOT EXISTS UserCafes (
             user_id INT NOT NULL,
@@ -41,6 +45,7 @@ db.connect((err) => {
     db.query(createCafesTable);
     db.query(createUserCafesTable);
 
+
     console.log("Tables created (if not already).");
 });
 
@@ -48,18 +53,28 @@ const app = express();
 
 const port = "5001";
 
+app.get("/createdb", (req, res) => 
+    {  let sql = "CREATE DATABASE liked_cafes";  
+        db.query(sql, (err) => 
+            {   if (err) {throw err;}    
+                res.send("Database created");  
+            }
+        );
+    }
+);
+
 app.listen(port, () => 
     {  console.log(`Server started on port ${port}`);}
 );
 
-app.post("/showUsers", (req, res) => {
+app.get("/showUsers", (req, res) => {
     db.query("SELECT * FROM Users", (err, result) => {
         if (err) return err;
         res.send(result);
     })
 });
 
-app.post("/showCafes", (req, res) => {
+app.get("/showCafes", (req, res) => {
     db.query("SELECT * FROM Cafes", (err, result) => {
         if (err) return err;
         res.send(result);
@@ -77,8 +92,8 @@ app.get("/addUser/:name", (req, res) => {
     console.log("Route hit!"); 
     const name = req.params.name;
 
-    const query = "INSERT INTO Users (name) VALUES (?)";
-    db.query(query, [name], (err, result) => {
+    const query = "INSERT INTO Users (username) VALUES (?)";
+    db.query(query,[name], (err, result) => {
         if (err) return res.send(err);
         res.send("User added successfully!");
     });
@@ -87,18 +102,18 @@ app.get("/addUser/:name", (req, res) => {
 app.get("/addCafe/:cafe", (req, res) => {
     const cafe = req.params.cafe;
     const query = "INSERT INTO Cafes (name) Values (?)"
-    db.query(query, [cafe], (err, result) => {
+    db.query(query, cafe, (err, result) => {
         if (err) throw err;
         res.send("Cafe added successfully!");
     })
 });
 
 // Like a cafe for a user
-app.post("/users/:userId/cafes/:cafeId", (req, res) => {
+app.get("/users/:userId/cafes/:cafeId", (req, res) => {
     const userId = req.params.userId;
     const cafeId = req.params.cafeId;
     const query = "INSERT INTO UserCafes (user_id, cafe_id) VALUES (?, ?)";
-    db_con.query(query, [userId, cafeId], (err, result) => {
+    db.query(query, [userId, cafeId], (err, result) => {
         if (err) throw err;
         res.send(`${userId} liked ${cafeId}`);
     });
@@ -113,7 +128,7 @@ app.get("/users/:id/cafes", (req, res) => {
         JOIN UserCafes ON Cafes.id = UserCafes.cafe_id
         WHERE UserCafes.user_id = ?
     `;
-    db_con.query(query, [userId], (err, results) => {
+    db.query(query, [userId], (err, results) => {
         if (err) throw err;
         res.json(results);
     });
