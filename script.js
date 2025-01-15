@@ -1,147 +1,83 @@
 let map;
-
-let lat, long;
-
-async function initMap(lat, long) {
-  const { Map } = await google.maps.importLibrary("maps");
-
-  map = new Map(document.getElementById("map"), {
-    center: { lat: lat, lng: long },
-    zoom: 12,
-  });
-}
-
-navigator.geolocation.getCurrentPosition((position) => {
-  lat = position.coords.latitude;
-  long = position.coords.longitude;
-  initMap(lat, long);
-});
-
-/*
-//copied from GOOGLE API Documentation 
-let map;
 let center;
 
-async function initMap() {
+// Initialize map
+async function initMap(x, y) {
   const { Map } = await google.maps.importLibrary("maps");
 
-  //change to be location of browser 
-  center = { lat: 37.4161493, lng: -122.0812166 };
+  center = { lat: x, lng: y };
   map = new Map(document.getElementById("map"), {
     center: center,
-    zoom: 11,
+    zoom: 20, //this zoom doesnt matter bc we expand the boundaries when we add markers
     mapId: "DEMO_MAP_ID",
   });
-  findPlaces();
 }
 
-async function findPlaces() {
+// fetches places
+async function fetchPlaces(position) {
   const { Place } = await google.maps.importLibrary("places");
+    const request = {
+      textQuery: "cafe",
+      fields: ["displayName", "location", "businessStatus"],
+      locationBias: { lat: position.coords.latitude, lng: position.coords.longitude },
+      language: "en-US",
+      maxResultCount: 20,
+      minRating: 3.2,
+      region: "us",
+      useStrictTypeFiltering: false,
+    };
+    
+    const { places } = await Place.searchByText(request);
+
+    if (places.length) {
+      addMarkers(places);
+      display(places);
+    } else {
+      console.log("No results");
+    }
+}
+
+// add marker for each place
+async function addMarkers(places) {
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-  const request = {
-    //edit to get this request dispaly what we want 
-    textQuery: "Tacos in Mountain View",
-    fields: ["displayName", "location", "businessStatus"],
-    includedType: "restaurant",
-    //location of browser
-    locationBias: { lat: 37.4161493, lng: -122.0812166 },
-    isOpenNow: true,
-    language: "en-US",
-    maxResultCount: 8,
-    minRating: 3.2,
-    region: "us",
-    useStrictTypeFiltering: false,
-  };
-  //@ts-ignore
-  const { places } = await Place.searchByText(request);
+  const { LatLngBounds } = await google.maps.importLibrary("core");
+  const bounds = new LatLngBounds();
 
-  if (places.length) {
-    console.log(places);
-
-    const { LatLngBounds } = await google.maps.importLibrary("core");
-    const bounds = new LatLngBounds();
-
-    // Loop through and get all the results.
-    places.forEach((place) => {
-      const markerView = new AdvancedMarkerElement({
-        map,
-        position: place.location,
-        title: place.displayName,
-      });
-
-      bounds.extend(place.location);
-      console.log(place);
+  places.forEach((place) => {
+    const markerView = new AdvancedMarkerElement({
+      map,
+      position: place.location,
+      title: place.displayName,
     });
-    map.fitBounds(bounds);
-  } else {
-    console.log("No results");
-  }
+
+    bounds.extend(place.location);
+    console.log(place.displayName);
+  });
+
+  map.fitBounds(bounds);
 }
 
-initMap();
+// display places on the DOM
+function display(places) {
+  const container = document.querySelector('ul');
+  
+  places.forEach(place => {
+    const listItem = document.createElement('li');
 
+    const textItem = document.createElement('p');
+    textItem.textContent = place.displayName;
+    listItem.appendChild(textItem);
 
-class List {
-    constructor() {
-    }
-    
-    //edit to be a like 
-    like() {
-        fetch(`http://localhost:3001/markcomplete/${itemName}`, {
-            method: 'GET'});
-        this.display();
-    }
+    const likeButton = document.createElement('button');
+    likeButton.textContent = 'heart';
+    listItem.appendChild(likeButton);
 
-    getContent() {
-        return this.content;
-    }
-    
-
-    display() {
-        this.itemsDOM = document.querySelector('.items');
-        this.itemsDOM.textContent = '';
-
-        let i = 0;
-
-        //change to use map api data and populate - use places? 
-        fetch('http://localhost:3001/displaytasks', {
-            method: 'GET',
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                data.forEach(item => {
-                    i++;
-
-                    const itemDOM = document.createElement('div');
-                    itemDOM.id = 'item' + i;
-
-                    const taskName = document.createElement('li');
-                    taskName.textContent = item.task;
-                    taskName.addEventListener('click', () => this.complete(item.task));
-                    itemDOM.appendChild(taskName);
-
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.textContent = 'like';
-                    deleteBtn.addEventListener('click', () => this.delete(item.task));
-                    itemDOM.appendChild(deleteBtn);
-
-                    console.log(item.task);
-
-                    if (item.completed == 1) {
-                        itemDOM.classList.add('done');
-                    }
-                    else {
-                        itemDOM.classList.remove('done');
-                    }
-
-                    this.itemsDOM.appendChild(itemDOM);
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }
+    container.appendChild(listItem);
+  });
 }
-*/
 
-
-
+// creates map and gets places once user gives position
+navigator.geolocation.getCurrentPosition((position) => {
+  initMap(position.coords.latitude, position.coords.longitude);
+  fetchPlaces(position);
+});

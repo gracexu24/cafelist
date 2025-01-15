@@ -18,8 +18,10 @@
   "homepage": "https://github.com/gracexu24/cafelist#readme",
   "dependencies": {
     "express": "^4.21.2",
+    "fetch": "^1.1.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.12.0",
+    "node-fetch": "^3.3.2",
     "webpack": "^5.97.1"
   },
   "devDependencies": {
