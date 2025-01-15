@@ -8,7 +8,7 @@ async function initMap(x, y) {
   center = { lat: x, lng: y };
   map = new Map(document.getElementById("map"), {
     center: center,
-    zoom: 20, //this zoom doesnt matter bc we expand the boundaries when we add markers
+    zoom: 10, //this zoom doesnt matter bc we expand the boundaries when we add markers
     mapId: "DEMO_MAP_ID",
   });
 }
@@ -21,7 +21,6 @@ async function fetchPlaces(position) {
       fields: ["displayName", "location", "businessStatus"],
       locationBias: { lat: position.coords.latitude, lng: position.coords.longitude },
       language: "en-US",
-      maxResultCount: 20,
       minRating: 3.2,
       region: "us",
       useStrictTypeFiltering: false,
