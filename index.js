@@ -110,28 +110,70 @@ app.get("/addCafe/:cafe", (req, res) => {
     })
 });
 
-// Like a cafe for a user
-app.get("/users/:userId/cafes/:cafeId", (req, res) => {
-    const userId = req.params.userId;
-    const cafeId = req.params.cafeId;
-    const query = "INSERT INTO UserCafes (user_id, cafe_id) VALUES (?, ?)";
-    db.query(query, [userId, cafeId], (err, result) => {
-        if (err) throw err;
-        res.send(`${userId} liked ${cafeId}`);
+// Like a cafe for a user --> use the name of the user and the name of the cafe
+app.get("/users/:userName/cafes/:cafeName", (req, res) => {
+    const userName = req.params.userName;
+    const cafeName = req.params.cafeName;
+
+    // Query to get user_id from username
+    const getUserIdQuery = "SELECT id FROM Users WHERE username = ?";
+    db.query(getUserIdQuery, [userName], (err, userResult) => {
+        if (err) {
+            console.error("Error fetching user ID:", err);
+            return res.status(500).send("Database error");
+        }
+        if (userResult.length === 0) {
+            return res.status(404).send("User not found");
+        }
+        const userId = userResult[0].id;
+
+        // Query to get cafe_id from cafeName
+        const getCafeIdQuery = "SELECT id FROM Cafes WHERE name = ?";
+        db.query(getCafeIdQuery, [cafeName], (err, cafeResult) => {
+            if (err) {
+                console.error("Error fetching cafe ID:", err);
+                return res.status(500).send("Database error");
+            }
+            if (cafeResult.length === 0) {
+                return res.status(404).send("Cafe not found");
+            }
+            const cafeId = cafeResult[0].id;
+
+            // Insert into UserCafes table
+            const insertQuery = "INSERT INTO UserCafes (user_id, cafe_id) VALUES (?, ?)";
+            db.query(insertQuery, [userId, cafeId], (err, result) => {
+                if (err) {
+                    console.error("Error inserting into UserCafes:", err);
+                    return res.status(500).send("Failed to like cafe");
+                }
+                res.send(`User '${userName}' liked cafe '${cafeName}'`);
+            });
+        });
     });
 });
 
-// Get liked cafes for a user
-app.get("/users/:id/cafes", (req, res) => {
-    const userId = req.params.id;
-    const query = `
+// Get liked cafes for a user <-- uses name of user
+app.get("/users/:userName/cafes", (req, res) => {
+    const getUserIdQuery = "SELECT id FROM Users WHERE username = ?";
+    db.query(getUserIdQuery, [userName], (err, userResult) => {
+        if (err) {
+            console.error("Error fetching user ID:", err);
+            return res.status(500).send("Database error");
+        }
+        if (userResult.length === 0) {
+            return res.status(404).send("User not found");
+        }
+        const userId = userResult[0].id;
+
+        const query = `
         SELECT Cafes.name
         FROM Cafes
         JOIN UserCafes ON Cafes.id = UserCafes.cafe_id
         WHERE UserCafes.user_id = ?
-    `;
-    db.query(query, [userId], (err, results) => {
-        if (err) throw err;
-        res.json(results);
+    `   ;
+        db.query(query, [userId], (err, results) => {
+            if (err) throw err;
+            res.json(results);
+        });
     });
 });
