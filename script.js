@@ -1,15 +1,22 @@
 let map;
 
-async function initMap() {
+let lat, long;
+
+async function initMap(lat, long) {
   const { Map } = await google.maps.importLibrary("maps");
 
   map = new Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 8,
+    center: { lat: lat, lng: long },
+    zoom: 12,
   });
 }
 
-initMap();
+navigator.geolocation.getCurrentPosition((position) => {
+  lat = position.coords.latitude;
+  long = position.coords.longitude;
+  initMap(lat, long);
+});
+
 /*
 //copied from GOOGLE API Documentation 
 let map;
