@@ -3,16 +3,18 @@ const mysql = require("mysql2");
 
 
 const db = mysql.createConnection({
-    host: "localhost",
+    host: "viaduct.proxy.rlwy.net",
     user: "root",
-    password: "Pleaseletmein!24",
-    database: "liked_cafes"
+    password: "jDFjwbNHaacVMTHojYcizTWOERgoVdik",
+    database: "railway",
+    port: "22511"
+
 });
 
 
 db.connect((err) => {
     if (err) throw err;
-    console.log("Database connected!");
+    console.log("Database connected..railway?!");
 
     //I had to get ride of this to create the database and then added it back
     // Create tables
@@ -50,7 +52,8 @@ db.connect((err) => {
 });
 
 const app = express();
-const port = "5001";
+//check for port or use local port 
+const port = process.env.PORT || 5001;"5001";
 
 app.get("/createdb", (req, res) => 
     {  let sql = "CREATE DATABASE liked_cafes";  
