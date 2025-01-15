@@ -27,7 +27,7 @@ db.connect((err) => {
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL UNIQUE
         )`;
-
+    
     //stores pairs (user, cafe) to relate the two other tables to each other. 
     // Can also search for all cafes a user liked
     //many to many relationship 
@@ -50,7 +50,6 @@ db.connect((err) => {
 });
 
 const app = express();
-
 const port = "5001";
 
 app.get("/createdb", (req, res) => 

@@ -1,3 +1,16 @@
+let map;
+
+async function initMap() {
+  const { Map } = await google.maps.importLibrary("maps");
+
+  map = new Map(document.getElementById("map"), {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 8,
+  });
+}
+
+initMap();
+/*
 //copied from GOOGLE API Documentation 
 let map;
 let center;
@@ -121,7 +134,7 @@ class List {
             .catch(error => console.error('Error fetching data:', error));
     }
 }
-
+*/
 
 
 
