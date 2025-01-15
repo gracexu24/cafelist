@@ -54,6 +54,8 @@ db.connect((err) => {
 const app = express();
 //check for port or use local port 
 const port = process.env.PORT || 5001;"5001";
+const cors = require("cors");
+app.use(cors());
 
 app.get("/createdb", (req, res) => 
     {  let sql = "CREATE DATABASE liked_cafes";  

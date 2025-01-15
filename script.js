@@ -59,7 +59,7 @@ async function addMarkers(places) {
 
 // display places on the DOM
 function display(places) {
-  const container = document.querySelector('ul');
+  const container = document.querySelector('.items');
   
   places.forEach(place => {
     const listItem = document.createElement('li');
@@ -81,3 +81,52 @@ navigator.geolocation.getCurrentPosition((position) => {
   initMap(position.coords.latitude, position.coords.longitude);
   fetchPlaces(position);
 });
+
+const l = new List();
+
+//for sidebar
+document.getElementById("openSidebar").addEventListener("click", function() {
+    document.getElementById("sidebar").classList.add("active");
+    l.display();
+});
+
+document.getElementById("closeSidebar").addEventListener("click", function() {
+    document.getElementById("sidebar").classList.remove("active");
+});
+
+
+//for list of users and their liked cafes
+
+class List {
+    constructor() {
+    }
+    
+    display() {
+        this.itemsDOM = document.querySelector('.users');
+        this.itemsDOM.textContent = '';
+
+        let i = 0;
+
+        fetch('https://cafelist-bv0z.onrender.com/showUsers', {
+            method: 'GET',
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.forEach(item => {
+                    i++;
+
+                    const itemDOM = document.createElement('div');
+                    itemDOM.id = 'item' + i;
+
+                    const taskName = document.createElement('li');
+                    taskName.textContent = item.username;
+
+                    this.itemsDOM.appendChild(itemDOM);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+}
+
+

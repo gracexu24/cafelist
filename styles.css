@@ -94,7 +94,7 @@ button:active {
     height: 100vh;
     position: fixed;
     top: 0;
-    right: -300px; /* Start hidden */
+    right: -500px; /* Start hidden */
     background-color: #333;
     color: white;
     padding: 20px;
