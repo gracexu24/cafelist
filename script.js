@@ -33,7 +33,7 @@ class List {
                     itemDOM.id = 'item' + i;
 
                     // Add the user's name
-                    const userName = document.createElement('h3');
+                    const userName = document.createElement('h4');
                     userName.textContent = item.username;
                     itemDOM.appendChild(userName);
                     // Add a container for the user's liked cafes
@@ -207,6 +207,7 @@ const l = new List();
 //for sidebar
 document.getElementById("openSidebar").addEventListener("click", function() {
     document.getElementById("sidebar").classList.add("active");
+    document.getElementById("container").classList.add("active");
     // Call display method, handle errors gracefully
     try {
         l.display();
