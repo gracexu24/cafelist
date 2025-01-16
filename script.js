@@ -137,15 +137,7 @@ async function addMarkers(places) {
 
 // display places on the DOM
 // display currently wont work bc it cant fetch the liked cafes properly yet
-async function display(places) {
-  fetch(`https://cafelist-bv0z.onrender.com/users/${user}/cafes`, { method: 'GET' })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
+function display(places) {
       const container = document.querySelector('.items');
       container.innerHTML = "";
     
@@ -157,14 +149,6 @@ async function display(places) {
         listItem.appendChild(textItem);
         
         const likeButton = document.createElement('button');
- 
- 
-        if (data.contains(place.displayName)) { //contains is not a function but idk how the data will be stored so
-        //                                       until we see data we dont know how to check if it contains anything
-          likeCafe(place, likeButton);
-        }
- 
- 
         likeButton.addEventListener('click', () => likeCafe(place, likeButton));
         likeButton.textContent = 'heart';
         listItem.appendChild(likeButton);
@@ -172,16 +156,14 @@ async function display(places) {
         container.appendChild(listItem);
       });
      
-    })
- }
+    }
  
  
- function likeCafe(cafe, button) {
+function likeCafe(cafe, button) {
   button.classList.contains("liked")
   ? button.classList.remove("liked")
   : button.classList.add("liked");
- 
- 
+
   fetch(`https://cafelist-bv0z.onrender.com/addCafe/${cafe.displayName}`, { method: 'GET', mode: 'no-cors' });
   fetch(`https://cafelist-bv0z.onrender.com/addUser/${user}`, { method: 'GET', mode: 'no-cors' });
   fetch(`https://cafelist-bv0z.onrender.com/users/${user}/cafes/${cafe.displayName}`, { method: 'GET', mode: 'no-cors' });
