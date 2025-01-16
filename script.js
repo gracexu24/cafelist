@@ -25,7 +25,6 @@ class List {
             return response.json();
             })
             .then(data => {
-                console.log(data);
                 data.forEach(item => {
                     i++;
 
@@ -68,7 +67,6 @@ class List {
             return response.json();
             })
             .then(data => {
-                console.log(data);
                 data.forEach(item => {
                                     // Check if the data is null, empty, or not an array
                     if (!data || data.length === 0) {
@@ -142,7 +140,6 @@ async function addMarkers(places) {
     });
 
     bounds.extend(place.location);
-    console.log(place.displayName);
   });
 
   map.fitBounds(bounds);
@@ -163,28 +160,16 @@ function display(places) {
         
         const likeButton = document.createElement('button');
         likeButton.addEventListener('click', () => likeCafe(place, likeButton));
+        likeButton.classList.add('p' + place.displayName.replaceAll(" ", "-").replaceAll("'", ""));
         likeButton.textContent = 'heart';
         listItem.appendChild(likeButton);
-   
         container.appendChild(listItem);
-      });
-     
+      })
     }
- 
-fetch(`https://cafelist-bv0z.onrender.com/users/${user}/cafes`, { method: 'GET', mode: 'cors' })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    console.log('target hit!')
-    return response.json();
-  })
-  .then(data => {
-    console.log(data);
-  });
 
 
 function likeCafe(cafe, button) {
+
   button.classList.contains("liked") ? button.classList.remove("liked") : button.classList.add("liked");
 
   fetch(`https://cafelist-bv0z.onrender.com/addCafe/${cafe.displayName}`, { method: 'GET', mode: 'no-cors' })
@@ -197,10 +182,37 @@ function likeCafe(cafe, button) {
 }
 
 // creates map and gets places once user gives position
-navigator.geolocation.getCurrentPosition((position) => {
-  initMap(position.coords.latitude, position.coords.longitude);
-  fetchPlaces(position);
-});
+const getCurrentPositionPromise = () => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+getCurrentPositionPromise()
+  .then((position) => {
+    initMap(position.coords.latitude, position.coords.longitude);
+    return fetchPlaces(position); // Assuming fetchPlaces is asynchronous and returns a promise
+  })
+  .then(() => {
+    return fetch(`https://cafelist-bv0z.onrender.com/users/${user}/cafes`, { method: 'GET', mode: 'cors' });
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then((data) => {
+    data.forEach((place) => {
+      document.querySelectorAll(`.p${place.name.replaceAll(" ", "-").replaceAll("'", "")}`).forEach((button) =>
+        button.classList.add('liked')
+      );
+    });
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+
 
 const l = new List();
 
