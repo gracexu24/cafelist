@@ -171,17 +171,30 @@ function display(places) {
      
     }
  
- 
-function likeCafe(cafe, button) {
-  button.classList.contains("liked")
-  ? button.classList.remove("liked")
-  : button.classList.add("liked");
+fetch(`https://cafelist-bv0z.onrender.com/users/${user}/cafes`, { method: 'GET', mode: 'cors' })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    console.log('target hit!')
+    return response.json();
+  })
+  .then(data => {
+    console.log(data);
+  });
 
-  fetch(`https://cafelist-bv0z.onrender.com/addCafe/${cafe.displayName}`, { method: 'GET', mode: 'no-cors' });
-  fetch(`https://cafelist-bv0z.onrender.com/addUser/${user}`, { method: 'GET', mode: 'no-cors' });
-  fetch(`https://cafelist-bv0z.onrender.com/users/${user}/cafes/${cafe.displayName}`, { method: 'GET', mode: 'no-cors' });
+
+function likeCafe(cafe, button) {
+  button.classList.contains("liked") ? button.classList.remove("liked") : button.classList.add("liked");
+
+  fetch(`https://cafelist-bv0z.onrender.com/addCafe/${cafe.displayName}`, { method: 'GET', mode: 'no-cors' })
+    .then(() => {
+      fetch(`https://cafelist-bv0z.onrender.com/addUser/${user}`, { method: 'GET', mode: 'no-cors' });
+    })
+    .then(() => {
+      fetch(`https://cafelist-bv0z.onrender.com/users/${user}/cafes/${cafe.displayName}`, { method: 'GET', mode: 'no-cors' });
+    })
 }
- 
 
 // creates map and gets places once user gives position
 navigator.geolocation.getCurrentPosition((position) => {

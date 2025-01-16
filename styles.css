@@ -153,3 +153,8 @@ label{
 button{
     color:white; 
 }
+
+
+.liked {
+    background-color: purple;
+}
