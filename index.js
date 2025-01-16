@@ -96,7 +96,7 @@ app.get("/addUser/:name", (req, res) => {
     console.log("Route hit!"); 
     const name = req.params.name;
 
-    const query = "INSERT INTO Users (username) VALUES (?)";
+    const query = "INSERT IGNORE INTO Users (username) VALUES (?)";
     db.query(query,[name], (err, result) => {
         if (err) return res.send(err);
         res.send("User added successfully!");
@@ -105,7 +105,7 @@ app.get("/addUser/:name", (req, res) => {
 
 app.get("/addCafe/:cafe", (req, res) => {
     const cafe = req.params.cafe;
-    const query = "INSERT INTO Cafes (name) Values (?)"
+    const query = "INSERT IGNORE INTO Cafes (name) Values (?)"
     db.query(query, cafe, (err, result) => {
         if (err) throw err;
         res.send("Cafe added successfully!");
@@ -142,7 +142,7 @@ app.get("/users/:username/cafes/:cafename", (req, res) => {
             const cafeId = cafeResult[0].id;
 
             // Insert into UserCafes table
-            const insertQuery = "INSERT INTO UserCafes (user_id, cafe_id) VALUES (?, ?)";
+            const insertQuery = "INSERT IGNORE INTO UserCafes (user_id, cafe_id) VALUES (?, ?)";
             db.query(insertQuery, [userId, cafeId], (err, result) => {
                 if (err) {
                     console.error("Error inserting into UserCafes:", err);
