@@ -4,6 +4,14 @@ let center;
 //for list of users and their liked cafes
 let user = "tejas2"; // default user, changed when submit button is clicked
 
+function makeSafeForCSS(name) {
+  return name.replace(/[^a-z0-9]/g, function(s) {
+      var c = s.charCodeAt(0);
+      if (c == 32) return '-';
+      if (c >= 65 && c <= 90) return '_' + s.toLowerCase();
+      return '__' + ('000' + c.toString(16)).slice(-4);
+  });
+}
 class List {
     constructor() {
     }
@@ -159,7 +167,7 @@ function display(places) {
         
         const likeButton = document.createElement('button');
         likeButton.addEventListener('click', () => likeCafe(place, likeButton));
-        likeButton.classList.add('p' + place.displayName.replaceAll(" ", "-").replaceAll("'", ""));
+        likeButton.classList.add(makeSafeForCSS(place.displayName));
         likeButton.textContent = 'heart';
         listItem.appendChild(likeButton);
         container.appendChild(listItem);
@@ -200,7 +208,7 @@ getCurrentPositionPromise()
   })
   .then((data) => {
     data.forEach((place) => {
-      document.querySelectorAll(`.p${place.name.replaceAll(" ", "-").replaceAll("'", "")}`).forEach((button) =>
+      document.querySelectorAll(`.${makeSafeForCSS(place.name)}`).forEach((button) =>
         button.classList.add('liked')
       );
     });
@@ -208,6 +216,9 @@ getCurrentPositionPromise()
   .catch((error) => {
     console.error("Error:", error);
   });
+
+ 
+
 
 
 const l = new List();
