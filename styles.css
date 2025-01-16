@@ -154,3 +154,14 @@ button{
 .liked {
     background-color: purple;
 }
+
+#friends-list {
+    background-color: #ea4ba0;
+    height: 80%;
+    border-radius: 10px;
+    overflow-y: auto;
+}
+
+h4 {
+    letter-spacing: 5px;
+}

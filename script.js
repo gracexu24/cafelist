@@ -2,8 +2,7 @@ let map;
 let center;
 
 //for list of users and their liked cafes
-
-let user;
+let user = "tejas2"; // default user, changed when submit button is clicked
 
 class List {
     constructor() {
@@ -219,6 +218,7 @@ const l = new List();
 //for sidebar
 document.getElementById("openSidebar").addEventListener("click", function() {
     document.getElementById("sidebar").classList.add("active");
+    document.querySelector(".container").classList.add("active");
     // Call display method, handle errors gracefully
     try {
         l.display();
@@ -250,6 +250,7 @@ submitBtn.addEventListener('click', (e) => {
    user = input.value;
    fetch(`https://cafelist-bv0z.onrender.com/addUser/${input.value}`, {
        method: 'GET'});
+   user = input.value;
    input.value = '';
    dialog.close();
 });
