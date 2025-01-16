@@ -222,7 +222,7 @@ const input = document.querySelector('#new-user');
 
 submitBtn.addEventListener('click', (e) => {
    e.preventDefault();
-   fetch(`https://cafelist-bv0z.onrender.com/addUser/'${input.value}`, {
+   fetch(`https://cafelist-bv0z.onrender.com/addUser/${input.value}`, {
        method: 'GET'});
    input.value = '';
    dialog.close();
