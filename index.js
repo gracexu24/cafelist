@@ -177,6 +177,7 @@ app.get("/users/:userName/cafes", (req, res) => {
     `   ;
         db.query(query, [userId], (err, results) => {
             if (err) throw err;
+            res.send(results);
             res.json(results);
         });
     });
