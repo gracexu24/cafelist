@@ -11,7 +11,7 @@
     <h1>Cafe List</h1>
     <!--sidebar info (chatgpt helped)-->
     <!-- Button to Open Sidebar -->
-    <button id="openSidebar">Users</button>
+    <button id="openSidebar">Liked Cafes</button>
 
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
@@ -33,6 +33,14 @@
             </ul>
         </div>
     </div>
+
+    <!--user sign in-->
+    <dialog>
+        <form method="post">
+            <label for="new-task">Username: <input type="text" id="new-task"></label>
+            <button type="submit" id="submit">Sign In</button>
+        </form>
+    </dialog>
 
     <!--use my key-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnAoQ5YRs3E_Xqs-RINUzz-P4FkXn5yIo&libraries=places"></script>

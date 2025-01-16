@@ -131,9 +131,19 @@ button:active {
     top: 20px;
     right: 20px;
     padding: 10px 20px;
-    background: #ffe177;
+    background: #ffd900;
     color: white;
     border: none;
     cursor: pointer;
     font-size: 16px;
+}
+
+
+dialog {
+    background-color: rgb(0, 0, 0);
+}
+
+input {
+    background-color: #ffd900;
+
 }
