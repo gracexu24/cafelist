@@ -174,9 +174,6 @@ function likeCafe(cafe, button) {
 
   fetch(`https://cafelist-bv0z.onrender.com/addCafe/${cafe.displayName}`, { method: 'GET', mode: 'no-cors' })
     .then(() => {
-      fetch(`https://cafelist-bv0z.onrender.com/addUser/${user}`, { method: 'GET', mode: 'no-cors' });
-    })
-    .then(() => {
       fetch(`https://cafelist-bv0z.onrender.com/users/${user}/cafes/${cafe.displayName}`, { method: 'GET', mode: 'no-cors' });
     })
 }
