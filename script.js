@@ -3,7 +3,7 @@ let center;
 
 //for list of users and their liked cafes
 
-const user = "tejas2";
+let user;
 
 class List {
     constructor() {
@@ -219,7 +219,6 @@ const l = new List();
 //for sidebar
 document.getElementById("openSidebar").addEventListener("click", function() {
     document.getElementById("sidebar").classList.add("active");
-    document.getElementById("container").classList.add("active");
     // Call display method, handle errors gracefully
     try {
         l.display();
@@ -248,6 +247,7 @@ const input = document.querySelector('#new-user');
 
 submitBtn.addEventListener('click', (e) => {
    e.preventDefault();
+   user = input.value;
    fetch(`https://cafelist-bv0z.onrender.com/addUser/${input.value}`, {
        method: 'GET'});
    input.value = '';
