@@ -32,19 +32,27 @@ class List {
                     const itemDOM = document.createElement('div');
                     itemDOM.id = 'item' + i;
 
-                    const userName = document.createElement('li');
+                    // Add the user's name
+                    const userName = document.createElement('h3');
                     userName.textContent = item.username;
-                    console.log(userName);
-                    
                     itemDOM.appendChild(userName);
+                    // Add a container for the user's liked cafes
+                    const cafesContainer = document.createElement('ul');
+                    cafesContainer.className = 'cafes'; // Class for styling the cafes
+                    itemDOM.appendChild(cafesContainer);
+
+                    // Append the user's container to the DOM
                     this.itemsDOM.appendChild(itemDOM);
+
+                    // Fetch and display cafes for this user
+                    this.cafes(item.username, cafesContainer);
                 });
             })
             .catch(error => console.error('Error fetching data:', error));
     }
-    cafes(user) {
-        this.itemsDOM = document.querySelector('.cafes');
-        this.itemsDOM.textContent = '';
+    cafes(user,container) {
+        //can't call this.itemDOM again, dont need .cafes
+        container.textContent = '';
 
         let i = 0;
 
@@ -62,17 +70,22 @@ class List {
             .then(data => {
                 console.log(data);
                 data.forEach(item => {
+                                    // Check if the data is null, empty, or not an array
+                    if (!data || data.length === 0) {
+                        console.warn("No data returned for user:", user);
+            
+                        // Display a friendly message in the DOM
+                        const noDataMessage = document.createElement('p');
+                        noDataMessage.textContent = `No liked cafes found for user "${user}".`;
+                        container.appendChild(noDataMessage);
+            
+                        return; // Exit early since there's no data to process
+                    }
                     i++;
 
-                    const itemDOM = document.createElement('div');
-                    itemDOM.id = 'item' + i;
-
-                    const userName = document.createElement('li');
-                    userName.textContent = item.username;
-                    console.log(userName);
-                    
-                    itemDOM.appendChild(userName);
-                    this.itemsDOM.appendChild(itemDOM);
+                    const cafeItem = document.createElement('li');
+                    cafeItem.textContent = item.name;
+                    container.appendChild(cafeItem);
                 });
             })
             .catch(error => console.error('Error fetching data:', error));
@@ -194,3 +207,23 @@ document.getElementById("closeSidebar").addEventListener("click", function() {
 });
 
 
+//for user sign in
+const dialog = document.querySelector('dialog');
+
+
+document.addEventListener('DOMContentLoaded', () => {
+   dialog.showModal();
+});
+
+
+const submitBtn = document.querySelector('button#submit');
+const input = document.querySelector('#new-user');
+
+
+submitBtn.addEventListener('click', (e) => {
+   e.preventDefault();
+   fetch(`https://cafelist-bv0z.onrender.com/addUser/'${input.value}`, {
+       method: 'GET'});
+   input.value = '';
+   dialog.close();
+});
