@@ -113,9 +113,9 @@ app.get("/addCafe/:cafe", (req, res) => {
 });
 
 // Like a cafe for a user --> use the name of the user and the name of the cafe
-app.get("/users/:userName/cafes/:cafeName", (req, res) => {
-    const userName = req.params.userName;
-    const cafeName = req.params.cafeName;
+app.get("/users/:username/cafes/:cafename", (req, res) => {
+    const userName = req.params.username;
+    const cafeName = req.params.cafename;
 
     // Query to get user_id from username
     const getUserIdQuery = "SELECT id FROM Users WHERE username = ?";
@@ -156,6 +156,8 @@ app.get("/users/:userName/cafes/:cafeName", (req, res) => {
 
 // Get liked cafes for a user <-- uses name of user
 app.get("/users/:userName/cafes", (req, res) => {
+    const userName = req.params.userName;
+    
     const getUserIdQuery = "SELECT id FROM Users WHERE username = ?";
     db.query(getUserIdQuery, [userName], (err, userResult) => {
         if (err) {

@@ -1,6 +1,83 @@
 let map;
 let center;
 
+//for list of users and their liked cafes
+
+class List {
+    constructor() {
+    }
+    
+    display() {
+        this.itemsDOM = document.querySelector('.users');
+        this.itemsDOM.textContent = '';
+
+        let i = 0;
+
+        fetch('https://cafelist-bv0z.onrender.com/showUsers', {
+            method: 'GET',
+            })
+            //try to handle errors
+            .then(response => {if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                data.forEach(item => {
+                    i++;
+
+                    const itemDOM = document.createElement('div');
+                    itemDOM.id = 'item' + i;
+
+                    const userName = document.createElement('li');
+                    userName.textContent = item.username;
+                    console.log(userName);
+                    
+                    itemDOM.appendChild(userName);
+                    this.itemsDOM.appendChild(itemDOM);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+    cafes(user) {
+        this.itemsDOM = document.querySelector('.cafes');
+        this.itemsDOM.textContent = '';
+
+        let i = 0;
+
+        const call = 'https://cafelist-bv0z.onrender.com/users/' + user + '/cafes';
+
+        fetch(call, {
+            method: 'GET',
+            })
+            //try to handle errors
+            .then(response => {if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                data.forEach(item => {
+                    i++;
+
+                    const itemDOM = document.createElement('div');
+                    itemDOM.id = 'item' + i;
+
+                    const userName = document.createElement('li');
+                    userName.textContent = item.username;
+                    console.log(userName);
+                    
+                    itemDOM.appendChild(userName);
+                    this.itemsDOM.appendChild(itemDOM);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+}
+
+
 // Initialize map
 async function initMap(x, y) {
   const { Map } = await google.maps.importLibrary("maps");
@@ -86,46 +163,16 @@ const l = new List();
 //for sidebar
 document.getElementById("openSidebar").addEventListener("click", function() {
     document.getElementById("sidebar").classList.add("active");
-    l.display();
+    // Call display method, handle errors gracefully
+    try {
+        l.display();
+    } catch (error) {
+        console.error('Error in l.display():', error);
+    }
 });
 
 document.getElementById("closeSidebar").addEventListener("click", function() {
     document.getElementById("sidebar").classList.remove("active");
 });
-
-
-//for list of users and their liked cafes
-
-class List {
-    constructor() {
-    }
-    
-    display() {
-        this.itemsDOM = document.querySelector('.users');
-        this.itemsDOM.textContent = '';
-
-        let i = 0;
-
-        fetch('https://cafelist-bv0z.onrender.com/showUsers', {
-            method: 'GET',
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                data.forEach(item => {
-                    i++;
-
-                    const itemDOM = document.createElement('div');
-                    itemDOM.id = 'item' + i;
-
-                    const taskName = document.createElement('li');
-                    taskName.textContent = item.username;
-
-                    this.itemsDOM.appendChild(itemDOM);
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }
-}
 
 
