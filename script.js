@@ -192,30 +192,7 @@ const getCurrentPositionPromise = () => {
   });
 };
 
-getCurrentPositionPromise()
-  .then((position) => {
-    initMap(position.coords.latitude, position.coords.longitude);
-    return fetchPlaces(position); // Assuming fetchPlaces is asynchronous and returns a promise
-  })
-  .then(() => {
-    return fetch(`https://cafelist-bv0z.onrender.com/users/${user}/cafes`, { method: 'GET', mode: 'cors' });
-  })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then((data) => {
-    data.forEach((place) => {
-      document.querySelectorAll(`.p${makeSafeForCSS(place.name)}`).forEach((button) =>
-        button.classList.add('liked')
-      );
-    });
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+
 
  
 
@@ -254,11 +231,35 @@ const input = document.querySelector('#new-user');
 
 
 submitBtn.addEventListener('click', (e) => {
-   e.preventDefault();
-   user = input.value;
-   fetch(`https://cafelist-bv0z.onrender.com/addUser/${input.value}`, {
-       method: 'GET'});
-   user = input.value;
-   input.value = '';
-   dialog.close();
+  e.preventDefault();
+  user = input.value;
+  fetch(`https://cafelist-bv0z.onrender.com/addUser/${input.value}`, {
+    method: 'GET'});
+  user = input.value;
+  input.value = '';
+  dialog.close();
+  getCurrentPositionPromise()
+    .then((position) => {
+      initMap(position.coords.latitude, position.coords.longitude);
+      return fetchPlaces(position); // Assuming fetchPlaces is asynchronous and returns a promise
+    })
+    .then(() => {
+      return fetch(`https://cafelist-bv0z.onrender.com/users/${user}/cafes`, { method: 'GET', mode: 'cors' });
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      data.forEach((place) => {
+        document.querySelectorAll(`.p${makeSafeForCSS(place.name)}`).forEach((button) =>
+          button.classList.add('liked')
+        );
+      });
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 });
